@@ -1,0 +1,84 @@
+% adopted from Dave Johnson's 'sane' style for LaTex 2.09
+%
+\textheight 9in		% 1in top and bottom margin
+\textwidth 6.5in	% 1in left and right margin
+
+\oddsidemargin 0in	% Both side margins are now 1in
+\evensidemargin 0in
+
+% The header goes .5in from top of the page and from the text.
+\topmargin -.5in \headsep .5in
+
+% Marginal notes have to fit within the 1in margins: use .7in for the
+% notes themselves with the extra .3in evenly on either side.
+\marginparwidth .7in \marginparsep .15in
+
+% For multiple citations at the same place, put a little space after the comma
+% separating their references.  That is, make ``[foo84, bar85]'' rather
+% than ``[foo84,bar85]'' like LaTeX normally does.  This looks nicer and
+% allows a page break if necessary.
+\def\@citex[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{,\hskip.25em\relax}\@ifundefined
+       {b@\@citeb}{{\bf ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}%
+\hbox{\csname b@\@citeb\endcsname}}}{#1}}
+
+% Make a command that can be used to change the line-spaceing anywhere
+% within the document.  **This forces you into /rm, although it now
+% keeps your font size the same.**
+\def\linespacing#1{\def\baselinestretch{#1} \let\@tempa\@currsize
+    \let\@currsize\relax \@tempa}
+
+% Force footnotes to be single-spaced, regardless of the current setting
+% of baselinestretch.
+\long\def\@footnotetext#1{\insert\footins{\def\baselinestretch{1}\footnotesize
+    \interlinepenalty\interfootnotelinepenalty 
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+   \edef\@currentlabel{\csname p@footnote\endcsname\@thefnmark}\@makefntext
+    {\rule{\z@}{\footnotesep}\ignorespaces
+      #1\strut}}}
+
+% Don't indent the footnote number in the actual footnote.
+\long\def\@makefntext#1{\parindent 1em\noindent $^{\@thefnmark}$#1}
+
+% Put a little space between multiple footnotes on the same page.
+\advance \footnotesep 3pt
+
+
+% Define a more sane pagestyle.  Saying \pagestyle{sane} works like
+% myheadings, except that you can specify both the header and the footer.
+% Initially, all headers and footers are empty.  This also defines commands
+% \evenheader, \oddheader, \evenfooter, and \oddfooter to redefine these
+% fields. Also, the commands \header and \footer can be used to change both
+% even and odd settings.
+% WARNING:  These will soon change to three-part titles as:
+%		\header{left}{center}{right}
+\def\ps@sane{\let\@mkboth\@gobbletwo
+\def\sectionmark##1{}\def\subsectionmark##1{}%
+\def\@oddhead{}\def\@evenhead{}\def\@oddfoot{}\def\@evenfoot{}%
+\def\oddheader##1{\def\@oddhead{##1}}%
+\def\evenheader##1{\def\@evenhead{##1}}%
+\def\oddfooter##1{\def\@oddfoot{##1}}%
+\def\evenfooter##1{\def\@evenfoot{##1}}%
+\def\header##1{\def\@oddhead{##1}\def\@evenhead{##1}}%
+\def\footer##1{\def\@oddfoot{##1}\def\@evenfoot{##1}}}
+
+% ... and redefine the section heading macros to remove excessive
+%     space and font size
+%
+\def\section{\@startsection {section}
+    {1}{\z@}{-2.5ex}{1.75ex}{\large\bf}}
+\def\subsection{\@startsection{subsection}
+    {2}{\z@}{-2ex}{1.5ex}{\bf}}
+\def\subsubsection{\@startsection{subsubsection}
+    {3}{\z@}{-2ex}{1.5ex}{\bf}}
+\def\paragraph{\@startsection{paragraph}
+    {4}{\z@}{-2ex}{-1em}{\bf}}
+\def\subparagraph{\@startsection{subparagraph}
+    {4}{\parindent}{-1.7ex}{-1em}{\bf}}
+
+\newcommand{\paidforby}{\xdef\@thefnmark{}\@footnotetext}
+
